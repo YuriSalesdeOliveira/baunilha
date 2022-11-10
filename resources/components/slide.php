@@ -1,7 +1,7 @@
-<script>
+<script defer>
 
-    let slides = document.querySelectorAll('slide');
-
+    let slides = document.querySelectorAll('.slide');
+    console.log(slides);
     slides.forEach((slide) => {
         slide.addEventListener('click', () => {
             slide.classList.add('slide__azure');
@@ -18,7 +18,7 @@
         background-color: antiquewhite;
     }
 
-    .slide .slide.slide__azure {
+    .slide.slide__azure {
         background-color: azure;
     }
 </style>
