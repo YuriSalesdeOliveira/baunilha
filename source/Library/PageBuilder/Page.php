@@ -2,29 +2,48 @@
 
 namespace Source\Library\PageBuilder;
 
-use DOMDocument;
 use DOMNode;
+use DOMDocument;
+use App\Exceptions\PageException;
 
 class Page
 {
     protected DOMDocument $page;
 
-    public function __construct(string $pagePath)
+    public function __construct(string $pagePath, array $args = [])
     {
         $page = new DOMDocument();
-        @$page->loadHTML($this->fileContent($pagePath));
+        @$page->loadHTML($this->render($pagePath, $args));
 
         $this->page = $page;
     }
 
-    public function appendChild(DOMNode $element, string $inTagName): Page
+    public function appendChild(DOMNode $elementChild, string $elementID): Page
     {
-        [$inTag] = $this->getElementByTagName([$inTagName]);
+        [$element] = $this->getElementById([$elementID]);
 
-        $element = $this->page->importNode($element);
-        $inTag->appendChild($element);
+        $elementChild = $this->page->importNode($elementChild);
+        $element->appendChild($elementChild);
 
         return $this;
+    }
+
+    public function getElementById(array $IDList): array
+    {
+        $elementList = [];
+        foreach ($IDList as $ID) {
+
+            $element = $this->page->getElementById($ID);
+
+            if (!$element) {
+
+                throw new PageException("No element was found with the ID '{$ID}'");
+            }
+
+            $elementList[] = $element;
+        }
+
+        return $elementList;
     }
 
     public function getElementByTagName(array $tagNameList): array
@@ -32,7 +51,14 @@ class Page
         $elementList = [];
         foreach ($tagNameList as $tagName) {
 
-            $elementList[] = $this->page->getElementsByTagName($tagName)->item(0);
+            $element = $this->page->getElementsByTagName($tagName)->item(0);
+
+            if (!$element) {
+
+                throw new PageException("No element was found with the tag name '{$tagNameList}'");
+            }
+
+            $elementList[] = $element;
         }
 
         return $elementList;
@@ -43,9 +69,13 @@ class Page
         return $this->page->saveHTML();
     }
 
-    protected function fileContent(string $pagePath): string
+    protected function render(string $pagePath, array $args = []): string
     {
         ob_start();
+
+        foreach ($args as $variable => $value) {
+            $$variable = $value;
+        }
 
         require($pagePath);
 

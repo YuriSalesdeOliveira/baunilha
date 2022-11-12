@@ -1,4 +1,4 @@
-<script defer>
+<script>
 
     let slides = document.querySelectorAll('.slide');
     console.log(slides);
@@ -7,7 +7,6 @@
             slide.classList.add('slide__azure');
         });
     });
-
 
 </script>
 

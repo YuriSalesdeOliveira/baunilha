@@ -27,3 +27,8 @@ function app(string $key, string|array $default): string|array
 
     return $app ?? $default;
 }
+
+function url(string $path): string
+{
+    return app('site.root', 'http://localhost') . $path;
+}

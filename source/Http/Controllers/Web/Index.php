@@ -13,13 +13,16 @@ class Index extends Controller
     public function handle(Request $request, Response $response): Response
     {
         $baseHTML = new Page(
-            paths('resources') . '/template/baseHTML.php'
+            paths('resources') . '/template/baseHTML.php',
+            args: [
+                'title' => 'baunilha'
+            ]
         );
 
         $pageBuilder = new PageBuilder(
             $baseHTML,
-            styleOutputPath: paths('public') . '/assets/style.css',
-            scriptOutputPath: paths('public') . '/assets/script.js'
+            styleOutputPath: paths('public') . '/assets/css/style.css',
+            scriptOutputPath: paths('public') . '/assets/js/script.js'
         );
 
         $componentList = ['slide'];
