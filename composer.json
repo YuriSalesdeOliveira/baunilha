@@ -11,6 +11,7 @@
     },
     "require": {
         "slim/slim": "4.*",
-        "slim/psr7": "^1.5"
+        "slim/psr7": "^1.5",
+        "illuminate/database": "^9.39.0"
     }
 }
