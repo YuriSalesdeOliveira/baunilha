@@ -20,8 +20,14 @@
     .slide.slide__azure {
         background-color: azure;
     }
+
+    .button {
+        padding: 10px 20px;
+        color: white;
+        background-color: brown;
+    }
 </style>
 
 <section class="slide">
-
+    <a href="" class="button">Botao</a>
 </section>

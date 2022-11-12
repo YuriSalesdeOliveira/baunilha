@@ -6,6 +6,7 @@
             "Source\\": "source"
         },
         "files": [
+            "config/database.php",
             "config/helpers.php"
         ]
     },

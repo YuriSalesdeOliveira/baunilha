@@ -5,6 +5,6 @@ use Source\Http\Controllers\Web\Index;
 
 return function (App $app) {
     
-    $app->get('/', [Index::class, 'handle'], 'index.handle');
+    $app->get('/', [Index::class, 'handle'])->setName('index.handle');
     
 };

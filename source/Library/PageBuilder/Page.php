@@ -22,7 +22,7 @@ class Page
     {
         [$element] = $this->getElementById([$elementID]);
 
-        $elementChild = $this->page->importNode($elementChild);
+        $elementChild = $this->page->importNode($elementChild, true);
         $element->appendChild($elementChild);
 
         return $this;

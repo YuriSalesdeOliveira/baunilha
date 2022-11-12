@@ -32,7 +32,7 @@ class Index extends Controller
                 paths('resources') . "/components/{$componentName}.php"
             );
 
-            $pageBuilder->addComponent($componentName, $component);
+            $pageBuilder->addComponent($component);
         }
 
         $page = $pageBuilder->build();

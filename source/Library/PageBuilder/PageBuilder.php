@@ -19,23 +19,11 @@ class PageBuilder
     ) {
     }
 
-    public function addComponent(string $name, Page $component): PageBuilder
+    public function addComponent(Page $component): PageBuilder
     {
-        $this->components[$name] = $component;
+        $this->components[] = $component;
 
         return $this;
-    }
-
-    public function removeComponent(string $name): bool
-    {
-        if (isset($this->components[$name])) {
-
-            unset($this->components[$name]);
-
-            return true;
-        }
-
-        return false;
     }
 
     protected function addScript(DOMNode $script): void
