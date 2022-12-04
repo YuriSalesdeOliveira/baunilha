@@ -29,7 +29,7 @@ class Index extends Controller
         foreach ($componentList as $componentName) {
 
             $component = new Page(
-                paths('resources') . "/components/{$componentName}.php"
+                paths('resources') . "/components/{$componentName}/{$componentName}.php"
             );
 
             $pageBuilder->addComponent($component);

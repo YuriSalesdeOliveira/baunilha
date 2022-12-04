@@ -46,19 +46,19 @@ class Page
         return $elementList;
     }
 
-    public function getElementByTagName(array $tagNameList): array
+    public function getElementsByTagName(array $tagNameList): array
     {
         $elementList = [];
         foreach ($tagNameList as $tagName) {
 
-            $element = $this->page->getElementsByTagName($tagName)->item(0);
+            $elements = $this->page->getElementsByTagName($tagName);
 
-            if (!$element) {
+            if (!$elements) {
 
                 throw new PageException("No element was found with the tag name '{$tagNameList}'");
             }
 
-            $elementList[] = $element;
+            $elementList[] = $elements;
         }
 
         return $elementList;

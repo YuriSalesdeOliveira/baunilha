@@ -2,7 +2,9 @@
 
 namespace Source\Library\PageBuilder;
 
+use DOMElement;
 use DOMNode;
+use DOMNodeList;
 
 class PageBuilder
 {
@@ -15,7 +17,7 @@ class PageBuilder
     public function __construct(
         protected Page $baseHTML,
         protected string $styleOutputPath,
-        protected string $scriptOutputPath
+        protected string $scriptOutputPath,
     ) {
     }
 
@@ -26,29 +28,52 @@ class PageBuilder
         return $this;
     }
 
-    protected function addScript(DOMNode $script): void
+    protected function addScript(DOMNodeList $scripts): void
     {
-        $finalScript = "(function(){{$script->nodeValue}}());";
+        $finalScriptContent = '';
 
-        if (empty($this->scriptContent)) {
+        /** @var DOMElement $script */
+        foreach ($scripts as $script) {
+            $scriptContent = $this->scriptContent($script);
 
-            $this->scriptContent = $finalScript;
+            $wrapperScriptContent = "(function(){{$scriptContent}})();";
 
-            return;
+            $finalScriptContent .= $wrapperScriptContent;
         }
 
-        $this->scriptContent .= $finalScript;
+        $this->scriptContent = $finalScriptContent;
     }
 
-    protected function addStyle(DOMNode $style): void
+    protected function scriptContent(DOMElement $script): string
     {
-        if (empty($this->styleContent)) {
-
-            $this->styleContent = $style->nodeValue;
-
-            return;
+        if ($src = $script->getAttribute("src")) {
+            return file_get_contents($src);
         }
-        $this->styleContent .= $style->nodeValue;
+
+        return $script->nodeValue;
+    }
+
+    protected function addStyle(DOMNodeList $styles): void
+    {
+        $finalStyleContent = '';
+
+        /** @var DOMElement $style */
+        foreach ($styles as $style) {
+            $styleContent = $this->styleContent($style);
+
+            $finalStyleContent .= $styleContent;
+        }
+
+        $this->styleContent = $finalStyleContent;
+    }
+
+    protected function styleContent(DOMElement $style): string
+    {
+        if ($src = $style->getAttribute("src")) {
+            return file_get_contents($src);
+        }
+
+        return $style->nodeValue;
     }
 
     protected function scriptGenerate(): bool
@@ -64,13 +89,12 @@ class PageBuilder
     public function build(): string|false
     {
         foreach ($this->components as $component) {
+            [$scripts, $styles, $section] = $component->getElementsByTagName(["script", "style", "section"]);
 
-            [$script, $style, $section] = $component->getElementByTagName(['script', 'style', 'section']);
+            $this->addScript($scripts);
+            $this->addStyle($styles);
 
-            $this->addScript($script);
-            $this->addStyle($style);
-
-            $this->baseHTML->appendChild($section, 'main');
+            $this->baseHTML->appendChild($section->item(0), "main");
         }
 
         $this->scriptGenerate();
