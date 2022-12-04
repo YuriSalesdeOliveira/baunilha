@@ -7,6 +7,6 @@ return [
         'domain' => '',
         'locale' => 'pt_BR',
         'root' => 'http://localhost/baunilha',
-        'basePath' => '/baunilha'
-    ]
+        'basePath' => '/baunilha',
+    ],
 ];
