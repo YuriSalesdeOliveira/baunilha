@@ -2,20 +2,25 @@
 
 namespace Source\Http\Controllers\Web;
 
+use Slim\Routing\RouteContext;
+use Source\Library\PageBuilder\Page;
 use Source\Http\Controllers\Controller;
+use Source\Library\PageBuilder\PageBuilder;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Source\Library\PageBuilder\Page;
-use Source\Library\PageBuilder\PageBuilder;
 
 class Index extends Controller
 {
     public function handle(Request $request, Response $response): Response
     {
+        $routeContext = RouteContext::fromRequest($request);
+        $routeParser = $routeContext->getRouteParser();
+
         $baseHTML = new Page(
             paths('resources') . '/template/baseHTML.php',
             args: [
-                'title' => 'baunilha'
+                'title' => 'baunilha',
+                'route' => $routeParser
             ]
         );
 
@@ -29,7 +34,10 @@ class Index extends Controller
         foreach ($componentList as $componentName) {
 
             $component = new Page(
-                paths('resources') . "/components/{$componentName}/{$componentName}.php"
+                paths('resources') . "/components/{$componentName}/{$componentName}.php",
+                args: [
+                    'route' => $routeParser
+                ]
             );
 
             $pageBuilder->addComponent($component);

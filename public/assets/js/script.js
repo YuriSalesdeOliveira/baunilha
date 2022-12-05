@@ -5,6 +5,4 @@ slides.forEach((slide) => {
         slide.classList.add('slide__azure');
     });
 });
-})();(function(){
-    console.log('sim')
 })();

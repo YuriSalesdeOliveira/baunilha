@@ -3,7 +3,6 @@
 namespace Source\Library\PageBuilder;
 
 use DOMElement;
-use DOMNode;
 use DOMNodeList;
 
 class PageBuilder
@@ -46,7 +45,7 @@ class PageBuilder
 
     protected function scriptContent(DOMElement $script): string
     {
-        if ($src = $script->getAttribute("src")) {
+        if ($src = $script->getAttribute('src')) {
             return file_get_contents($src);
         }
 
@@ -69,7 +68,7 @@ class PageBuilder
 
     protected function styleContent(DOMElement $style): string
     {
-        if ($src = $style->getAttribute("src")) {
+        if ($src = $style->getAttribute('src')) {
             return file_get_contents($src);
         }
 
@@ -86,15 +85,15 @@ class PageBuilder
         return !!file_put_contents($this->styleOutputPath, $this->styleContent);
     }
 
-    public function build(): string|false
+    public function build(): string
     {
         foreach ($this->components as $component) {
-            [$scripts, $styles, $section] = $component->getElementsByTagName(["script", "style", "section"]);
+            [$scripts, $styles, $section] = $component->getElementsByTagName(['script', 'style', 'section']);
 
             $this->addScript($scripts);
             $this->addStyle($styles);
 
-            $this->baseHTML->appendChild($section->item(0), "main");
+            $this->baseHTML->appendChild($section->item(0), 'main');
         }
 
         $this->scriptGenerate();
