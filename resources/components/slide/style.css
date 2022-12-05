@@ -1,6 +1,10 @@
 .slide {
     width: 100%;
     height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 4px solid burlywood;
     background-color: antiquewhite;
 }
 
@@ -12,4 +16,8 @@
     padding: 10px 20px;
     color: white;
     background-color: brown;
+}
+
+.button:hover {
+    background-color: blueviolet;
 }

@@ -34,7 +34,7 @@ class Index extends Controller
         foreach ($componentList as $componentName) {
 
             $component = new Page(
-                paths('resources') . "/components/{$componentName}/{$componentName}.php",
+                paths('resources') . "/components/{$componentName}/index.php",
                 args: [
                     'route' => $routeParser
                 ]

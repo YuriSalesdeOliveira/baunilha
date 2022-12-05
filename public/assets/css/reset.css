@@ -7,18 +7,3 @@
 a {
     text-decoration: none;
 }
-
-ul {
-    list-style: none;
-}
-
-button {
-    border: none;
-}
-
-html,
-body,
-#main {
-    width: 100%;
-    min-height: 100vh;
-}
