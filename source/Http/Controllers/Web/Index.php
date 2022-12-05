@@ -19,7 +19,7 @@ class Index extends Controller
         $baseHTML = new Page(
             paths('resources') . '/template/baseHTML.php',
             args: [
-                'title' => 'baunilha',
+                'title' => 'smoothie',
                 'route' => $routeParser
             ]
         );

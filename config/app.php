@@ -2,11 +2,11 @@
 
 return [
     'site' => [
-        'name' => 'baunilha',
+        'name' => 'smoothie',
         'description' => '',
         'domain' => '',
         'locale' => 'pt_BR',
-        'root' => 'http://localhost/baunilha',
-        'basePath' => '/baunilha',
+        'root' => 'http://localhost/smoothie',
+        'basePath' => '/smoothie',
     ],
 ];
