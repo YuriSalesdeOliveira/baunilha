@@ -8,6 +8,7 @@ use Source\Http\Controllers\Controller;
 use Source\Library\PageBuilder\PageBuilder;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Source\Http\Controllers\Components\Contracts\Component;
 
 class Index extends Controller
 {
@@ -30,15 +31,33 @@ class Index extends Controller
             scriptOutputPath: paths('public') . '/assets/js/script.js'
         );
 
-        $componentList = ['slide'];
+        $componentList = ['slide', 'gallery'];
         foreach ($componentList as $componentName) {
 
-            $component = new Page(
-                paths('resources') . "/components/{$componentName}/index.php",
-                args: [
-                    'route' => $routeParser
-                ]
+            $componentController = $this->getController(
+                namespace: 'Source\Http\Controllers\Components',
+                controllerName: $componentName
             );
+
+            if ($componentController) {
+
+                $component = $componentController->handle(
+                    $request->getParsedBody(),
+                    $request->getQueryParams(),
+                    [
+                        'route' => $routeParser
+                    ]
+                );
+                
+            } else {
+
+                $component = new Page(
+                    paths('resources') . "/components/{$componentName}/index.php",
+                    args: [
+                        'route' => $routeParser
+                    ]
+                );
+            }
 
             $pageBuilder->addComponent($component);
         }
@@ -47,5 +66,17 @@ class Index extends Controller
 
         $response->getBody()->write($page);
         return $response;
+    }
+
+    protected function getController(string $namespace, string $controllerName, array $constructArgs = []): Component|false
+    {
+        $controller =  "{$namespace}\\" . ucfirst($controllerName);
+
+        if (class_exists($controller)) {
+
+            return new $controller(...$constructArgs);
+        }
+
+        return false;
     }
 }

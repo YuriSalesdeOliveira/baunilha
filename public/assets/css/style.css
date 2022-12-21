@@ -21,3 +21,12 @@
 .button:hover {
     background-color: blueviolet;
 }
+    .gallery {
+        width: 100%;
+        height: 400px;
+        background-color: cadetblue;
+    }
+
+    .gallery__tomato {
+        background-color: tomato;
+    }

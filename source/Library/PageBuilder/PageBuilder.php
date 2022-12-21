@@ -10,8 +10,8 @@ class PageBuilder
     /** @var Page[] $components */
     protected array $components;
 
-    protected string $scriptContent;
-    protected string $styleContent;
+    protected string $scriptContent = '';
+    protected string $styleContent = '';
 
     public function __construct(
         protected Page $baseHTML,
@@ -29,18 +29,14 @@ class PageBuilder
 
     protected function addScript(DOMNodeList $scripts): void
     {
-        $finalScriptContent = '';
-
         /** @var DOMElement $script */
         foreach ($scripts as $script) {
             $scriptContent = $this->scriptContent($script);
 
             $wrapperScriptContent = "(function(){{$scriptContent}})();";
 
-            $finalScriptContent .= $wrapperScriptContent;
+            $this->scriptContent .= $wrapperScriptContent;
         }
-
-        $this->scriptContent = $finalScriptContent;
     }
 
     protected function scriptContent(DOMElement $script): string
@@ -54,16 +50,12 @@ class PageBuilder
 
     protected function addStyle(DOMNodeList $styles): void
     {
-        $finalStyleContent = '';
-
         /** @var DOMElement $style */
         foreach ($styles as $style) {
             $styleContent = $this->styleContent($style);
 
-            $finalStyleContent .= $styleContent;
+            $this->styleContent .= $styleContent;
         }
-
-        $this->styleContent = $finalStyleContent;
     }
 
     protected function styleContent(DOMElement $style): string

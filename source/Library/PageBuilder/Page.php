@@ -71,6 +71,10 @@ class Page
 
     protected function render(string $pagePath, array $args = []): string
     {
+        if (!file_exists($pagePath)) {
+            throw new PageException("No page found in the given path");
+        }
+
         ob_start();
 
         foreach ($args as $variable => $value) {
