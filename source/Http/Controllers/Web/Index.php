@@ -5,10 +5,10 @@ namespace Source\Http\Controllers\Web;
 use Slim\Routing\RouteContext;
 use Source\Library\PageBuilder\Page;
 use Source\Http\Controllers\Controller;
+use Source\Components\Support\Component;
 use Source\Library\PageBuilder\PageBuilder;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
-use Source\Http\Controllers\Components\Contracts\Component;
 
 class Index extends Controller
 {
@@ -34,49 +34,22 @@ class Index extends Controller
         $componentList = ['slide', 'gallery'];
         foreach ($componentList as $componentName) {
 
-            $componentController = $this->getController(
-                namespace: 'Source\Http\Controllers\Components',
-                controllerName: $componentName
+            $componentClass = Component::get($componentName);
+
+            $componentView = $componentClass->handle(
+                $request->getParsedBody() ?? [],
+                $request->getQueryParams() ?? [],
+                args: [
+                    'route' => $routeParser
+                ]
             );
 
-            if ($componentController) {
-
-                $component = $componentController->handle(
-                    $request->getParsedBody(),
-                    $request->getQueryParams(),
-                    [
-                        'route' => $routeParser
-                    ]
-                );
-                
-            } else {
-
-                $component = new Page(
-                    paths('resources') . "/components/{$componentName}/index.php",
-                    args: [
-                        'route' => $routeParser
-                    ]
-                );
-            }
-
-            $pageBuilder->addComponent($component);
+            $pageBuilder->addComponent($componentView);
         }
 
         $page = $pageBuilder->build();
 
         $response->getBody()->write($page);
         return $response;
-    }
-
-    protected function getController(string $namespace, string $controllerName, array $constructArgs = []): Component|false
-    {
-        $controller =  "{$namespace}\\" . ucfirst($controllerName);
-
-        if (class_exists($controller)) {
-
-            return new $controller(...$constructArgs);
-        }
-
-        return false;
     }
 }
