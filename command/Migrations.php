@@ -4,7 +4,7 @@ namespace Command;
 
 use Composer\Script\Event;
 
-class Migrate
+class Migrations
 {
     public static function migrate(Event $event): void
     {

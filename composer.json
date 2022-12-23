@@ -12,9 +12,9 @@
         ]
     },
     "scripts": {
-        "migrate": "Command\\Migrate::migrate",
-        "rollback": "Command\\Migrate::rollback",
-        "seed": "Command\\Seed::run"
+        "migrations:migrate": "Command\\Migrations::migrate",
+        "migrations:rollback": "Command\\Migrations::rollback",
+        "seeders:run": "Command\\Seeders::run"
     },
     "require": {
         "slim/slim": "4.*",

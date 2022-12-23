@@ -4,7 +4,7 @@ namespace Command;
 
 use Composer\Script\Event;
 
-class Seed
+class Seeders
 {
     public static function run(Event $event)
     {
