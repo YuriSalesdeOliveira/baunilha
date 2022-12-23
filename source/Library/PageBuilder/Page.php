@@ -4,7 +4,7 @@ namespace Source\Library\PageBuilder;
 
 use DOMNode;
 use DOMDocument;
-use App\Exceptions\PageException;
+use Source\Library\PageBuilder\Exceptions\PageException;
 
 class Page
 {
