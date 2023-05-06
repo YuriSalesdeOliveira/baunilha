@@ -6,14 +6,22 @@ use App\Exceptions\ComponentException;
 
 class Component
 {
-    public static function parse(string $componentName, string $namespace = 'Source\Components'): ComponentInterface
+    public static function create(string $componentName): ComponentInterface
     {
-        $componentClass = "$namespace\\$componentName";
-        if (class_exists($componentClass)) {
+        $componentsList = app('components', []);
 
-            return new $componentClass();
+        if (in_array($componentName, array_keys($componentsList))) {
+
+            $componentClass = $componentsList[$componentName];
+
+            if (class_exists($componentClass)) {
+
+                return new $componentClass();
+            }
+
+            throw new ComponentException("The class component $componentName was not found");
         }
 
-        throw new ComponentException('The component was not found');
+        throw new ComponentException("The component $componentName not found in components list");
     }
 }

@@ -18,9 +18,9 @@ class Page
         $this->page = $page;
     }
 
-    public function appendChild(DOMNode $elementChild, string $elementID): Page
+    public function appendChild(DOMNode $elementChild, string $elementId): Page
     {
-        [$element] = $this->getElementById([$elementID]);
+        [$element] = $this->getElementById([$elementId]);
 
         $elementChild = $this->page->importNode($elementChild, true);
         $element->appendChild($elementChild);
@@ -28,16 +28,16 @@ class Page
         return $this;
     }
 
-    public function getElementById(array $IDList): array
+    public function getElementById(array $IdList): array
     {
         $elementList = [];
-        foreach ($IDList as $ID) {
+        foreach ($IdList as $Id) {
 
-            $element = $this->page->getElementById($ID);
+            $element = $this->page->getElementById($Id);
 
             if (!$element) {
 
-                throw new PageException("No element was found with the ID '{$ID}'");
+                throw new PageException("No element was found with the Id '{$Id}'");
             }
 
             $elementList[] = $element;
@@ -76,6 +76,8 @@ class Page
         }
 
         ob_start();
+
+        $pageId = preg_replace('/[^A-Za-z0-9]/', '', base64_encode(random_bytes(9)));
 
         foreach ($args as $variable => $value) {
             $$variable = $value;

@@ -2,6 +2,8 @@
 
 use Database\Migrations\CreatePagesTable;
 use Database\Seeders\Page;
+use Source\Components\Gallery;
+use Source\Components\Slide;
 
 return [
     'site' => [
@@ -17,5 +19,9 @@ return [
     ],
     'seeders' => [
         Page::class
+    ],
+    'components' => [
+        'slide' => Slide::class,
+        'gallery' => Gallery::class
     ]
 ];

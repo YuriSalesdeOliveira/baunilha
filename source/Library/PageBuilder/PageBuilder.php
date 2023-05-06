@@ -4,12 +4,12 @@ namespace Source\Library\PageBuilder;
 
 use DOMElement;
 use DOMNodeList;
+use Source\Components\ComponentView;
 
 class PageBuilder
 {
-    /** @var Page[] $components */
-    protected array $components;
-
+    /** @var ComponentView[] $components */
+    protected array $componentViewsList;
     protected string $scriptContent = '';
     protected string $styleContent = '';
 
@@ -21,9 +21,9 @@ class PageBuilder
     {
     }
 
-    public function addComponent(Page $component): PageBuilder
+    public function addComponentView(ComponentView $componentView): PageBuilder
     {
-        $this->components[] = $component;
+        $this->componentViewsList[] = $componentView;
 
         return $this;
     }
@@ -86,13 +86,18 @@ class PageBuilder
 
     public function build(): string
     {
-        foreach ($this->components as $component) {
-            [$scripts, $styles, $section] = $component->getElementsByTagName(['script', 'style', 'section']);
+        $addedComponentViewIds = [];
+        foreach ($this->componentViewsList as $componentView) {
+            [$scripts, $styles, $section] = $componentView->getPage()->getElementsByTagName(['script', 'style', 'section']);
 
-            $this->addScript($scripts);
-            $this->addStyle($styles);
+            if (!in_array($componentView->getId(), $addedComponentViewIds)) {
+                $this->addScript($scripts);
+                $this->addStyle($styles);
+            }
 
             $this->baseHTML->appendChild($section->item(0), 'app');
+
+            $addedComponentViewIds[] = $componentView->getId();
         }
 
         $this->scriptGenerate();

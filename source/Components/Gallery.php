@@ -6,13 +6,16 @@ use Source\Library\PageBuilder\Page;
 
 class Gallery implements ComponentInterface
 {
-    public static function handle(array $bodyParams, array $queryParams, array $args): Page
+    public static function handle(array $bodyParams, array $queryParams, array $args): ComponentView
     {
-        $componentView = new Page(
+        $page = new Page(
             paths('resources.components') . '/gallery/index.php',
             $args
         );
 
-        return $componentView;
+        return ComponentView::create(
+            'gallery',
+            $page
+        );
     }
 }

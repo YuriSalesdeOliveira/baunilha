@@ -31,10 +31,10 @@ class Index extends Controller
             scriptOutputPath: paths('public') . '/assets/js/script.js'
         );
 
-        $componentList = ['Slide', 'Gallery'];
-        foreach ($componentList as $componentName) {
+        $componentsList = ['slide', 'gallery', 'slide', 'slide'];
 
-            $componentClass = Component::parse($componentName);
+        foreach ($componentsList as $componentName) {
+            $componentClass = Component::create($componentName);
 
             $componentView = $componentClass->handle(
                 $request->getParsedBody() ?? [],
@@ -44,7 +44,7 @@ class Index extends Controller
                 ]
             );
 
-            $pageBuilder->addComponent($componentView);
+            $pageBuilder->addComponentView($componentView);
         }
 
         $page = $pageBuilder->build();
