@@ -2,13 +2,13 @@
 
 namespace Source\Http\Controllers\Web;
 
-use Slim\Routing\RouteContext;
-use Source\Library\PageBuilder\Page;
-use Source\Http\Controllers\Controller;
-use Source\Components\Support\Component;
-use Source\Library\PageBuilder\PageBuilder;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Slim\Routing\RouteContext;
+use Source\Components\Component;
+use Source\Http\Controllers\Controller;
+use Source\Library\PageBuilder\Page;
+use Source\Library\PageBuilder\PageBuilder;
 
 class Index extends Controller
 {
@@ -20,7 +20,7 @@ class Index extends Controller
         $baseHTML = new Page(
             paths('resources') . '/template/baseHTML.php',
             args: [
-                'title' => 'smoothie',
+                'title' => app('site.name', 'smoothie'),
                 'route' => $routeParser
             ]
         );
@@ -31,10 +31,10 @@ class Index extends Controller
             scriptOutputPath: paths('public') . '/assets/js/script.js'
         );
 
-        $componentList = ['slide', 'gallery'];
+        $componentList = ['Slide', 'Gallery'];
         foreach ($componentList as $componentName) {
 
-            $componentClass = Component::get($componentName);
+            $componentClass = Component::parse($componentName);
 
             $componentView = $componentClass->handle(
                 $request->getParsedBody() ?? [],

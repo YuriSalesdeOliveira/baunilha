@@ -19,7 +19,7 @@ class Migrations
         }
     }
 
-    public static function rollback(Event $event)
+    public static function rollback(Event $event): void
     {
         $vendorDir = $event->getComposer()->getConfig()->get('vendor-dir');
         require $vendorDir . '/autoload.php';

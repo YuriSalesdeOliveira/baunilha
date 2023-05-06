@@ -1,10 +1,10 @@
 <?php
 
-namespace Source\Components\Contracts;
+namespace Source\Components;
 
 use Source\Library\PageBuilder\Page;
 
-interface Component
+interface ComponentInterface
 {
     public static function handle(array $bodyParams, array $queryParams, array $args): Page;
 }

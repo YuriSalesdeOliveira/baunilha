@@ -6,8 +6,8 @@ use Database\Seeders\Page;
 return [
     'site' => [
         'name' => 'smoothie',
-        'description' => '',
-        'domain' => '',
+        'description' => 'Framework smoothie',
+        'domain' => 'localhost',
         'locale' => 'pt_BR',
         'root' => 'http://localhost/smoothie',
         'basePath' => '/smoothie',

@@ -14,10 +14,11 @@ class PageBuilder
     protected string $styleContent = '';
 
     public function __construct(
-        protected Page $baseHTML,
+        protected Page   $baseHTML,
         protected string $styleOutputPath,
         protected string $scriptOutputPath,
-    ) {
+    )
+    {
     }
 
     public function addComponent(Page $component): PageBuilder
@@ -69,12 +70,18 @@ class PageBuilder
 
     protected function scriptGenerate(): bool
     {
-        return !!file_put_contents($this->scriptOutputPath, $this->scriptContent);
+        $minifierJS = MinifierJSFactory::create();
+        $minifierJS->add($this->scriptContent);
+
+        return is_numeric(file_put_contents($this->scriptOutputPath, $minifierJS->minify()));
     }
 
     protected function styleGenerate(): bool
     {
-        return !!file_put_contents($this->styleOutputPath, $this->styleContent);
+        $minifierCSS = MinifierCSSFactory::create();
+        $minifierCSS->add($this->styleContent);
+
+        return is_numeric(file_put_contents($this->styleOutputPath, $minifierCSS->minify()));
     }
 
     public function build(): string
@@ -85,7 +92,7 @@ class PageBuilder
             $this->addScript($scripts);
             $this->addStyle($styles);
 
-            $this->baseHTML->appendChild($section->item(0), 'main');
+            $this->baseHTML->appendChild($section->item(0), 'app');
         }
 
         $this->scriptGenerate();
