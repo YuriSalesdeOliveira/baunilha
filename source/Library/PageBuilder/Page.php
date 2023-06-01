@@ -8,6 +8,7 @@ use Source\Library\PageBuilder\Exceptions\PageException;
 
 class Page
 {
+    protected string $id;
     protected DOMDocument $page;
 
     public function __construct(string $pagePath, array $args = [])
@@ -77,8 +78,6 @@ class Page
 
         ob_start();
 
-        $pageId = preg_replace('/[^A-Za-z0-9]/', '', base64_encode(random_bytes(9)));
-
         foreach ($args as $variable => $value) {
             $$variable = $value;
         }
@@ -86,5 +85,14 @@ class Page
         require($pagePath);
 
         return ob_get_clean();
+    }
+
+    protected function generateId(): string
+    {
+        $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+
+        $randomCharacters = substr(str_shuffle($characters), 0, 5);
+
+        return substr_replace(md5(uniqid()), $randomCharacters, 0, 5);
     }
 }

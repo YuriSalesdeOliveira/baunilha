@@ -1,20 +1,19 @@
 <?php
 
-namespace Database\Migrations;
-
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Capsule\Manager as Capsule;
 
-class CreatePagesTable extends Migration
-{
+return new class extends Migration {
+
     /**
      * Run the migrations
      */
-    public function up()
+    public function up(): void
     {
-        Capsule::schema()->create('pages', function (Blueprint $table) {
+        Capsule::schema()->create('components', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
             $table->timestamps();
         });
     }
@@ -22,8 +21,8 @@ class CreatePagesTable extends Migration
     /**
      * Reverse the migrations
      */
-    public function down()
+    public function down(): void
     {
-        Capsule::schema()->dropIfExists('pages');
+        Capsule::schema()->dropIfExists('components');
     }
-}
+};

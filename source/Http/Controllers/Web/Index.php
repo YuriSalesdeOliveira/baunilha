@@ -12,7 +12,7 @@ use Source\Library\PageBuilder\PageBuilder;
 
 class Index extends Controller
 {
-    public function handle(Request $request, Response $response): Response
+    public function handle(Request $request, Response $response, array $args): Response
     {
         $routeContext = RouteContext::fromRequest($request);
         $routeParser = $routeContext->getRouteParser();
@@ -31,8 +31,9 @@ class Index extends Controller
             scriptOutputPath: paths('public') . '/assets/js/script.js'
         );
 
-        $componentsList = ['slide', 'gallery', 'slide', 'slide'];
+        $page = \App\Models\Page::where('path', '=', $args);
 
+        $componentsList = ['slide', 'gallery'];
         foreach ($componentsList as $componentName) {
             $componentClass = Component::create($componentName);
 

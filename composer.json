@@ -9,11 +9,11 @@
       "homepage": "https://github.com/YuriSalesdeOliveira"
     }
   ],
+
   "autoload": {
     "psr-4": {
       "App\\": "app",
       "Command\\": "command",
-      "Database\\": "database",
       "Source\\": "source"
     },
     "files": [
@@ -22,8 +22,11 @@
     ]
   },
   "scripts": {
+    "migrations:create": "Command\\Migrations::create",
+    "migrations:refresh": "Command\\Migrations::refresh",
     "migrations:migrate": "Command\\Migrations::migrate",
     "migrations:rollback": "Command\\Migrations::rollback",
+    "seeders:create": "Command\\Seeders::create",
     "seeders:run": "Command\\Seeders::run"
   },
   "require": {

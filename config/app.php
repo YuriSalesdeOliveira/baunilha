@@ -1,7 +1,5 @@
 <?php
 
-use Database\Migrations\CreatePagesTable;
-use Database\Seeders\Page;
 use Source\Components\Gallery;
 use Source\Components\Slide;
 
@@ -13,12 +11,6 @@ return [
         'locale' => 'pt_BR',
         'root' => 'http://localhost/smoothie',
         'basePath' => '/smoothie',
-    ],
-    'migrations' => [
-        CreatePagesTable::class
-    ],
-    'seeders' => [
-        Page::class
     ],
     'components' => [
         'slide' => Slide::class,

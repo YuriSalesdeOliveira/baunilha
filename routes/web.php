@@ -4,5 +4,9 @@ use Slim\App;
 use Source\Http\Controllers\Web\Index;
 
 return function (App $app) {
-    $app->get('/', [Index::class, 'handle'])->setName('index.handle');
+
+    /**
+     * Rota para as paginas
+     */
+    $app->get('[/{path:.*}]', [Index::class, 'handle'])->setName('index.handle');
 };

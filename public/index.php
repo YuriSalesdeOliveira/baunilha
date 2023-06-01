@@ -6,7 +6,7 @@ require_once dirname(__FILE__, 2) . '/vendor/autoload.php';
 
 $app = AppFactory::create();
 
-$app->setBasePath(app('site.basePath', default: ''));
+$app->setBasePath(app('site.basePath', '/smoothie'));
 
 $webRoutes = require_once paths('routes') . '/web.php';
 

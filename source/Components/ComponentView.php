@@ -8,7 +8,7 @@ readonly class ComponentView
 {
     public function __construct(
         protected string $id,
-        protected Page $page,
+        protected Page   $page,
     )
     {
     }

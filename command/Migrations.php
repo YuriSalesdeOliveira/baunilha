@@ -6,29 +6,70 @@ use Composer\Script\Event;
 
 class Migrations
 {
+    use GenerateFileNameTrait;
+
+    public static function create(Event $event): void
+    {
+        require static::getVendorDir($event) . '/autoload.php';
+
+        [$className] = $event->getArguments();
+
+        $fileName = static::generateFileName($className);
+
+        copy(
+            paths('core.skeletons') . '/migration.php',
+            paths('database.migrations') . "/$fileName.php"
+        );
+    }
+
+    public static function refresh(Event $event): void
+    {
+        static::rollback($event);
+        static::migrate($event);
+    }
+
     public static function migrate(Event $event): void
     {
-        $vendorDir = $event->getComposer()->getConfig()->get('vendor-dir');
-        require $vendorDir . '/autoload.php';
+        require static::getVendorDir($event) . '/autoload.php';
 
-        $migrations = app('migrations', []);
+        $migrationFiles = scandir(paths('database.migrations'));
 
-        foreach ($migrations as $migration) {
+        if ($migrationFiles) {
 
-            (new $migration)->up();
+            foreach ($migrationFiles as $file) {
+
+                if ($file != '.' && $file != '..') {
+
+                    $migration = require(paths('database.migrations') . "/$file");
+
+                    $migration->up();
+                }
+            }
         }
     }
 
     public static function rollback(Event $event): void
     {
-        $vendorDir = $event->getComposer()->getConfig()->get('vendor-dir');
-        require $vendorDir . '/autoload.php';
+        require static::getVendorDir($event) . '/autoload.php';
 
-        $migrations = app('migrations', []);
+        $migrationFiles = scandir(paths('database.migrations'));
 
-        foreach ($migrations as $migration) {
+        if ($migrationFiles) {
 
-            (new $migration)->down();
+            foreach (array_reverse($migrationFiles) as $file) {
+
+                if ($file != '.' && $file != '..') {
+
+                    $migration = require(paths('database.migrations') . "/$file");
+
+                    $migration->down();
+                }
+            }
         }
+    }
+
+    protected static function getVendorDir(Event $event)
+    {
+        return $event->getComposer()->getConfig()->get('vendor-dir');
     }
 }

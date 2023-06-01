@@ -20,6 +20,6 @@
     }
 </style>
 
-<section class="gallery">
+<section id="<?= $this->generateId() ?>" class="gallery">
 
 </section>

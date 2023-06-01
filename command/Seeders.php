@@ -3,19 +3,48 @@
 namespace Command;
 
 use Composer\Script\Event;
+use DateTime;
 
 class Seeders
 {
-    public static function run(Event $event)
+    use GenerateFileNameTrait;
+
+    public static function create(Event $event): void
     {
-        $vendorDir = $event->getComposer()->getConfig()->get('vendor-dir');
-        require $vendorDir . '/autoload.php';
+        require static::getVendorDir($event) . '/autoload.php';
 
-        $seeders = app('seeders', []);
+        [$className] = $event->getArguments();
 
-        foreach ($seeders as $seeder) {
+        $fileName = static::generateFileName($className);
 
-            (new $seeder)->run();
+        copy(
+            paths('core.skeletons') . '/seeder.php',
+            paths('database.seeders') . "/$fileName.php"
+        );
+    }
+
+    public static function run(Event $event): void
+    {
+        require static::getVendorDir($event) . '/autoload.php';
+
+        $seederFiles = scandir(paths('database.seeders'));
+
+        if ($seederFiles) {
+
+            foreach ($seederFiles as $file) {
+
+                if ($file != '.' && $file != '..') {
+
+                    $seeder = require_once(paths('database.seeders') . "/$file");
+
+                    $seeder->run();
+                }
+            }
         }
+    }
+
+    protected static function getVendorDir(Event $event)
+    {
+        return $event->getComposer()->getConfig()->get('vendor-dir');
     }
 }
